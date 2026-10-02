@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FirstDownstream — the EUDR DDS reference ledger for first downstream operators &amp; traders</title>
+<meta name="description" content="From 30 December 2026, every EU company supplied directly by an importer must record the EUDR due-diligence reference numbers it receives and keep them for five years. FirstDownstream turns that passive obligation into an audit-ready ledger — from €49/month.">
+<style>
+:root{--bg:#0e141c;--bg2:#111a24;--card:#16202c;--line:#24344a;--fg:#eaf0f8;--mut:#97a7bd;--acc:#3d8bff;--acc2:#2b6fe0;--acc-soft:rgba(61,139,255,.12);--acc-glow:rgba(61,139,255,.28);--ok:#3ddc97;--bad:#ff5d5d}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.7;overflow-x:hidden}
+main{max-width:1024px;margin:0 auto;padding:40px 22px 80px}
+header{text-align:center;padding:44px 0 12px;position:relative;background:
+  radial-gradient(620px 320px at 50% -120px, rgba(61,139,255,.2), transparent 70%),
+  radial-gradient(420px 220px at 12% 8%, rgba(43,111,224,.12), transparent 70%)}
+.eyebrow{display:inline-block;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);font-weight:700;border:1px solid rgba(61,139,255,.4);border-radius:20px;padding:5px 14px;margin-bottom:14px}
+.logo{font-size:1.8rem;font-weight:800;letter-spacing:.5px}
+.logo span{color:var(--acc)}
+h1{font-size:2.05rem;line-height:1.28;margin:16px 0 14px;font-weight:800;max-width:860px;margin-left:auto;margin-right:auto}
+h2{font-size:1.6rem;margin:52px 0 8px;font-weight:800}
+h3{font-size:1.15rem;margin:18px 0 8px}
+p{color:var(--mut);margin:10px 0}
+.sub{font-size:1.06rem;max-width:760px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px;margin:24px 0;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.acc{color:var(--acc);font-weight:700}
+.ok{color:var(--ok)}
+.bad{color:var(--bad)}
+.cta{display:inline-block;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:800;border-radius:10px;padding:15px 28px;text-decoration:none;margin:14px 8px 8px 0;font-size:1.02rem;box-shadow:0 6px 22px var(--acc-glow);transition:transform .15s, box-shadow .15s}
+.cta:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(61,139,255,.42)}
+.cta.sec{background:transparent;border:1px solid var(--line);color:var(--fg);box-shadow:none}
+form{margin-top:16px}
+label{display:block;font-size:.9rem;color:var(--mut);margin:12px 0 5px}
+input,select,textarea{width:100%;background:#0d1520;border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:12px 14px;font-size:1rem}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft)}
+button{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:14px}
+.hint{font-size:.82rem;color:var(--mut)}
+.step{display:grid;grid-template-columns:60px 1fr;gap:16px;align-items:start;margin-top:20px}
+.step:first-child{margin-top:4px}
+.step .ico{width:60px;height:60px;border-radius:16px;background:#0d1520;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step b{display:block;color:var(--fg);margin-bottom:4px;font-size:1.02rem}
+.step span{font-size:.92rem;color:var(--mut)}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 20px;margin:12px 0}
+.faq summary{font-weight:700;cursor:pointer}
+.faq p{margin-top:10px}
+.avis{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 20px;margin:12px 0}
+.avis b{color:var(--fg)}
+.stars{color:#ffb400;letter-spacing:2px}
+footer{margin-top:56px;text-align:center;font-size:.82rem;color:var(--mut)}
+/* ——— photos (libres de droits, stockées dans assets/) ——— */
+.photo{border-radius:18px;overflow:hidden;border:1px solid var(--line);margin:26px 0;position:relative}
+.photo img{width:100%;height:auto;display:block}
+.photo.dim::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(14,20,28,.72));pointer-events:none}
+.photo.cap::before{content:attr(data-cap);position:absolute;left:20px;bottom:16px;z-index:2;color:#eaf0f8;font-weight:700;font-size:.95rem;text-shadow:0 2px 12px rgba(0,0,0,.7);max-width:80%}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+.split .photo{margin:0}
+/* ——— démo : grille de cartes, jamais de tableau large ——— */
+.optgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.opt{background:#0d1520;border:1px solid var(--line);border-radius:13px;padding:16px;cursor:pointer;transition:border-color .15s,background .15s}
+.opt b{display:block;margin-bottom:5px;font-size:.96rem}
+.opt span{font-size:.8rem;color:var(--mut)}
+.opt.on{border-color:var(--acc);background:var(--acc-soft)}
+#risk-out{border:1px solid var(--acc);background:var(--acc-soft);border-radius:14px;padding:18px;margin-top:18px;display:none;text-align:center}
+#risk-total{font-size:1.5rem}
+#risk-detail{font-size:.95rem;margin-top:8px;color:var(--mut);text-align:left}
+#risk-detail li{margin:6px 0 6px 18px}
+.badge{display:inline-block;background:#123b2b;color:var(--ok);border:1px solid #1e5a41;border-radius:20px;padding:4px 14px;font-size:.8rem;font-weight:700}
+/* ——— étoiles cliquables (avis clients) ——— */
+.stars-in{display:flex;gap:4px;margin:10px 0 4px}
+.stars-in .star{background:transparent;border:none;cursor:pointer;font-size:1.8rem;line-height:1;color:#3a4a5f;padding:2px 4px;transition:color .15s,transform .1s;margin:0}
+.stars-in .star:hover{transform:scale(1.15)}
+.stars-in .star.on{color:#ffb400}
+.stars-in .star:focus{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
+/* ——— schémas (SVG authorés) ——— */
+.fig{border:1px solid var(--line);background:#0d1520;border-radius:16px;padding:10px;margin:20px 0 4px}
+.fig svg{width:100%;height:auto;display:block}
+.figcap{font-size:.78rem;color:var(--mut);text-align:center;margin:10px 0 2px}
+.herofig{margin:26px auto 8px;max-width:760px}
+/* ——— effets de scroll (progressive : tout reste visible sans JS) ——— */
+.rv{will-change:opacity,transform}
+@media(max-width:720px){h1{font-size:1.55rem}.optgrid{grid-template-columns:1fr}.step{grid-template-columns:50px 1fr;gap:12px}.step .ico{width:50px;height:50px}.split{grid-template-columns:1fr;gap:20px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div class="eyebrow">EUDR · 30 December 2026 · coffee, cocoa, wood, rubber, palm oil, soy, cattle</div>
+  <div class="logo">First<span>Downstream</span></div>
+  <h1>Your supplier's EUDR reference number arrives with the goods.<br>If you can't show it in 2027, customs and auditors will — and it's gone.</h1>
+  <p class="sub">From <b style="color:var(--fg)">30 December 2026</b>, every company supplied directly by an EUDR operator (coffee roasters, chocolate makers, wood and rubber distributors, leather traders, palm-oil and soy buyers) must <b style="color:var(--fg)">record the due-diligence statement (DDS) reference numbers it receives, tie them to the incoming deliveries, and keep the record for five years</b> (Art. 4(7), 5(3)–(4) EUDR). No geolocation, no geospatial platform — just a discipline your ERP doesn't have. <b style="color:var(--fg)">FirstDownstream is the ledger for that obligation.</b></p>
+
+  <div class="photo dim cap" data-cap="The reference number arrives with the delivery. What matters is what you do with it before the authority asks.">
+    <img src="assets/logistics-container.jpg" alt="Container ship — the DDS reference number travels with the goods from importer to first downstream buyer" loading="eager">
+  </div>
+
+  <p class="rv"><a class="cta" href="#demo">Check my exposure — free</a> <a class="cta sec" href="#pricing">See pricing</a></p>
+</header>
+
+<div class="split">
+  <div class="rv">
+    <div style="font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:6px">Concrete example</div>
+    <h3 style="margin-top:0">A €12M coffee roaster, one missing number, a €480,000 exposure.</h3>
+    <p>A German roaster buys green coffee from an importer. From 30 December 2026, the importer must pass on the DDS reference number for each shipment (Art. 4(7)); the roaster — the <b style="color:var(--fg)">first downstream operator</b> — must record it and keep it <b style="color:var(--fg)">5 years</b>.</p>
+    <p>An audit or a customs check (non-compliance: fines of <b style="color:var(--fg)">at least 4% of EU-wide annual turnover</b>) asks for the records. The roaster's ERP has purchase orders, but nobody logged reference numbers — goods receipts are filed in a shared drive, half scanned. The authority cannot verify traceability in time and the goods stay blocked, flags a non-compliance, or both.</p>
+    <p class="acc">FirstDownstream: €49/month, deliveries logged the day they arrive, reference numbers matched to goods receipts, one-click audit export. The roaster's 5-year record is complete, per delivery, per supplier.</p>
+  </div>
+  <div class="photo rv">
+    <img src="assets/warehouse.jpg" alt="Modern logistics warehouse — inbound goods where the DDS reference number must be captured on arrival" loading="lazy">
+  </div>
+</div>
+
+<h2>How it works</h2>
+<div class="card rv">
+  <div class="step">
+    <div class="ico">
+      <svg viewBox="0 0 48 48" width="34" height="34" role="img" aria-label="step 1: capture reference numbers on arrival">
+        <rect x="8" y="10" width="32" height="28" rx="4" fill="none" stroke="#3d8bff" stroke-width="2.4"/>
+        <path d="M8 18 L24 25 L40 18" fill="none" stroke="#3d8bff" stroke-width="2.4"/>
+        <path d="M16 30 H 32" stroke="#9aa7b4" stroke-width="2.4"/>
+      </svg>
+    </div>
+    <div><b>1 · Capture the numbers on arrival</b><span>Log the DDS reference number (or simplified-declaration identifier) when the goods arrive — mobile-friendly form, plus copy-paste from the supplier email or delivery note. That's the whole collection duty: it is passive, by law.</span></div>
+  </div>
+  <div class="step">
+    <div class="ico">
+      <svg viewBox="0 0 48 48" width="34" height="34" role="img" aria-label="step 2: assign to the right delivery">
+        <path d="M10 24 L20 34 L38 14" fill="none" stroke="#3ddc97" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div><b>2 · Tie each number to its delivery</b><span>Link the reference number to the goods receipt, the batch and the purchase order — supplier and customer master data kept beside it. Exactly the traceability Art. 5(3) demands, minus the consulting-shaped geospatial stack.</span></div>
+  </div>
+  <div class="step">
+    <div class="ico">
+      <svg viewBox="0 0 48 48" width="34" height="34" role="img" aria-label="step 3: audit-ready, five years">
+        <rect x="8" y="8" width="32" height="32" rx="4" fill="none" stroke="#3d8bff" stroke-width="2.4"/>
+        <path d="M16 20 L24 27 L34 15" fill="none" stroke="#3ddc97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div><b>3 · Audit-ready, five years</b><span>One-click export per supplier, per product, per delivery — the full evidence pack the authority can request at any time during the 5-year retention window. Substantiated concern? The export includes the escalation trail to record it.</span></div>
+  </div>
+</div>
+
+<div class="card rv" id="demo">
+  <h2 style="margin-top:0">Free check — are your incoming deliveries covered?</h2>
+  <p class="hint">Paste your goods-receipt lines (date, supplier, product, reference number). The check below tells you what 30 December 2026 means for each line — it's the same discipline the authority will test.</p>
+  <label for="lines">Your recent deliveries — one per line (YYYY-MM-DD | supplier | product | DDS reference)</label>
+  <textarea id="lines" style="min-height:150px;font-family:ui-monospace,Consolas,monospace;font-size:.85rem">2026-09-02 | VerdeTrading GmbH | green coffee 2×60kg bags | EUDR-REF-2026-103874
+2026-09-15 | VerdeTrading GmbH | green coffee 5×60kg bags | EUDR-REF-2026-112905
+2026-09-28 | Meridian Cocoa BV | cocoa beans 3×65kg bags | EUDR-REF-2026-118442
+2026-10-01 | Nordwood SA | oak veneer 4 pallets | (not received yet)</textarea>
+  <p class="hint">Format: date | supplier | product | reference number. Leave the reference empty when the supplier hasn't passed it on — good-faith rule (FAQ no. 3.4) applies.</p>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:6px">
+    <div>
+      <label for="rev">Your EU-wide annual turnover (€)</label>
+      <input id="rev" type="number" value="12000000" min="0" step="100000">
+    </div>
+  </div>
+  <button onclick="run()">Check my deliveries</button>
+  <div id="risk-out">
+    <div class="badge">Based on your lines</div>
+    <div class="bad" id="risk-total" style="font-size:1.4rem;margin-top:6px">—</div>
+    <p id="risk-detail" style="text-align:left"></p>
+    <p class="acc" style="margin-top:10px" id="risk-cta">—</p>
+  </div>
+</div>
+
+<div class="card rv">
+  <b>What the ledger does</b>
+  <div class="fig">
+    <svg viewBox="0 0 700 210" role="img" aria-label="From delivery to audit pack: capture reference, assign to receipt, keep master data, export evidence for five years">
+      <rect width="700" height="210" rx="14" fill="#0b1016"/>
+      <g font-family="Segoe UI,sans-serif">
+        <rect x="26" y="36" width="150" height="62" rx="10" fill="#16202c" stroke="#3a4a5f"/>
+        <text x="101" y="62" text-anchor="middle" font-size="12" fill="#eaf0f8">📥 Inbound capture</text>
+        <text x="101" y="82" text-anchor="middle" font-size="10.5" fill="#97a7bd">form + email / PDF</text>
+        <rect x="188" y="36" width="150" height="62" rx="10" fill="#16202c" stroke="#3a4a5f"/>
+        <text x="263" y="62" text-anchor="middle" font-size="12" fill="#eaf0f8">🔗 Assignment</text>
+        <text x="263" y="82" text-anchor="middle" font-size="10.5" fill="#97a7bd">number → receipt → PO</text>
+        <rect x="350" y="36" width="150" height="62" rx="10" fill="#16202c" stroke="#3a4a5f"/>
+        <text x="425" y="62" text-anchor="middle" font-size="12" fill="#eaf0f8">🗂️ Master data</text>
+        <text x="425" y="82" text-anchor="middle" font-size="10.5" fill="#97a7bd">suppliers, customers</text>
+        <rect x="512" y="36" width="150" height="62" rx="10" fill="#16202c" stroke="#3a4a5f"/>
+        <text x="587" y="62" text-anchor="middle" font-size="12" fill="#eaf0f8">📦 Audit pack</text>
+        <text x="587" y="82" text-anchor="middle" font-size="10.5" fill="#97a7bd">5-year export</text>
+      </g>
+      <path d="M350 112 L350 132" stroke="#3a4a5f" stroke-width="2"/>
+      <rect x="196" y="134" width="308" height="42" rx="21" fill="#3d8bff"/>
+      <text x="350" y="153" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">one number per delivery, kept 5 years</text>
+      <text x="350" y="190" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3ddc97">traceability complete — without a GIS team</text>
+    </svg>
+    <p class="figcap">Not another geospatial platform. The first-downstream duty is record-keeping — this is the record.</p>
+  </div>
+  <p class="hint">Backed by the roles in the amended Regulation (EU) 2023/1115 (Reg. (EU) 2025/2650): only the first downstream operator or trader collects and keeps reference numbers — further downstream actors don't. If your supplier passes a number to you, you are the first downstream buyer (European Commission FAQ no. 3.4).</p>
+</div>
+
+<h2 id="pricing">Pricing</h2>
+<div class="card rv">
+  <b>Solo — €49/month</b>
+  <p>1 entity. Reference-number ledger, inbound capture (form + paste), assignment to deliveries, 5-year record, one-click audit export per supplier. Enough for the roaster, distributor or wholesale buyer with a single importer relationship.</p>
+  <p class="hint">For reference: the enterprise EUDR stack (osapiens, LiveEO, Orbify) starts at tens of thousands per year and solves the operator-side geospatial problem you don't have. A consulting engagement to map your role runs €2k–€40k. This is the €49 ledger for the obligation you actually carry.</p>
+  <p><a class="cta" href="https://buy.stripe.com/eVqbIU49B15Vf1D8jJ3sI0u" rel="noopener" target="_blank">💳 Subscribe to Solo — €49/month</a></p>
+</div>
+<div class="card rv">
+  <b>Team — €149/month</b>
+  <p>Multiple entities and sites, CSV/ERP ingestion so receipts flow in automatically, audit-pack exports across the group, and per-user access for warehouse + finance. For importers' buyers, groups and multi-site distributors.</p>
+  <p><a class="cta" href="https://buy.stripe.com/aFa8wI5dFbKz6v7fMb3sI0v" rel="noopener" target="_blank">💳 Subscribe to Team — €149/month</a></p>
+</div>
+<div class="card rv">
+  <b>Scale — €299/month</b>
+  <p>Multi-country, supplier-side collection add-on (get declaration identifiers from your micro/small primary operators), API, and priority support. For groups managing several commodity chains or acting as authorised representatives.</p>
+  <p><a class="cta" href="https://buy.stripe.com/3cIaEQaxZbKz06JdE33sI0w" rel="noopener" target="_blank">💳 Subscribe to Scale — €299/month</a></p>
+</div>
+
+<h2>Questions frequently asked</h2>
+<div class="faq">
+  <details><summary>Am I really a "first downstream operator"?</summary>
+  <p>If a supplier passes a DDS reference number (or a simplified-declaration identifier) to you, the European Commission FAQ (5th iteration, no. 3.4) says you can assume you're the first downstream operator or trader — the obligation to pass numbers lies on the upstream operator, not on you to ask. You collect and keep the numbers; you don't file statements of your own.</p></details>
+  <details><summary>When does this start?</summary>
+  <p>Main obligations apply from 30 December 2026 for operators and downstream operators/traders of all sizes, with 30 June 2027 for natural persons and micro/small enterprises established by 31 December 2024 (Reg. (EU) 2025/2650) — except EUTR wood products, already covered from 30 December 2026. Records must be kept 5 years from the placing on the market.</p></details>
+  <details><summary>Do we need geolocation or a geospatial platform?</summary>
+  <p>No. That's the operator-side obligation (the importer's). Your duty as first downstream operator is collecting reference numbers, keeping supplier and customer master data, and retaining it five years. A ledger is the appropriate tool — this is the gap between the geospatial enterprise platforms (built for operators) and the €20k consulting engagements (built for nobody here).</p></details>
+  <details><summary>What if a supplier sends us no number at all?</summary>
+  <p>You may assume in good faith that the supplier is not an upstream operator (FAQ no. 3.4) — you don't have to investigate. If you later obtain information that a product may not comply, you must notify the competent authority immediately (Art. 5(5)) and, if you're a non-SME, verify before placing further products. The ledger keeps that trail.</p></details>
+  <details><summary>Is this legal advice?</summary>
+  <p>No. FirstDownstream keeps the operational record the regulation demands; it is not a law firm opinion. Your company remains responsible for the underlying facts — the reference numbers and master data you record.</p></details>
+  <details><summary>Can we cancel?</summary>
+  <p>Yes — monthly, no commitment, cancel in one click from the Stripe payment page. Annual prepay is an option for the fixed 2026/2027 deadlines if you want to lock the price.</p></details>
+</div>
+
+<div class="card rv">
+  <h3 style="margin-top:0">⭐ Customer reviews</h3>
+  <div id="reviews"></div>
+  <hr style="border-color:var(--line);margin:18px 0">
+  <p class="hint">You tested FirstDownstream? Leave a review (it goes straight to our team):</p>
+  <form id="revform" onsubmit="return sendReview(event)" style="margin-top:6px">
+    <label>Rating (1-5)</label>
+    <div class="stars-in" id="rv_stars" role="radiogroup" aria-label="Rating">
+      <button type="button" class="star" data-v="1" aria-label="1 star">☆</button>
+      <button type="button" class="star" data-v="2" aria-label="2 stars">☆</button>
+      <button type="button" class="star" data-v="3" aria-label="3 stars">☆</button>
+      <button type="button" class="star" data-v="4" aria-label="4 stars">☆</button>
+      <button type="button" class="star" data-v="5" aria-label="5 stars">☆</button>
+      <input type="hidden" id="rv_score" value="5">
+    </div>
+    <p class="hint" id="rv_star_hint">Click a star to fill it — 5 = excellent.</p>
+    <label>Your email</label>
+    <input type="email" id="rv_email" placeholder="you@yourcompany.com" required>
+    <label>Your comment</label>
+    <textarea id="rv_comment" rows="3" style="width:100%;background:#0d1520;border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:12px" placeholder="What worked, what's missing…"></textarea>
+    <button type="submit">Send my review</button>
+  </form>
+</div>
+
+<div class="card rv" id="start">
+  <h3 style="margin-top:0">Start now</h3>
+  <p>The exposure check above is free and takes 30 seconds. Paid plans start at €49/month, paid securely through Stripe. Prefer to talk first? We answer within 24 working hours:</p>
+  <p style="margin:18px 0"><a class="cta" href="https://buy.stripe.com/eVqbIU49B15Vf1D8jJ3sI0u" rel="noopener" target="_blank">💳 Subscribe to Solo — €49/month</a></p>
+  <p class="hint">Problem paying or a question? Write to us — we reply within 24 working hours:</p>
+  <form id="signform" onsubmit="return signup(event)" style="margin-top:8px">
+    <label>Your email</label>
+    <input type="email" id="se" placeholder="you@yourcompany.com" required>
+    <label>Your company and role in the chain (roaster, distributor, wholesaler…)</label>
+    <input type="text" id="sp" placeholder="Coffee roaster, buying from an EU importer">
+    <label>Commodities you buy</label>
+    <input type="text" id="sa" placeholder="Coffee, cocoa, wood, rubber…">
+    <button type="submit">I prefer to be contacted</button>
+  </form>
+</div>
+
+<footer>FirstDownstream — the EUDR DDS reference ledger for first downstream operators &amp; traders. Sources: Regulation (EU) 2023/1115 as amended by Reg. (EU) 2025/2650 (Art. 4(7), 5(3)–(4)); European Commission FAQ (5th iteration, no. 3.4); Commission guidance on the Deforestation Regulation. · <a href="mailto:nypsus.business@gmail.com" style="color:var(--mut)">Contact</a></footer>
+</main>
+<script>
+function money(n){return n.toLocaleString('en-US',{style:'currency',currency:'EUR',maximumFractionDigits:0})}
+function normRef(s){
+  s=(s||'').trim();
+  if(!s) return '';
+  var m=s.match(/[A-Z0-9]{4,}\s*[-_/]\s*[A-Z0-9]{2,}\s*[-_/]\s*[A-Z0-9]{2,}/i);
+  return m?m[0].replace(/\s+/g,''):'';
+}
+function run(){
+  var txt=document.getElementById('lines').value;
+  var lines=txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  var rev=parseFloat(document.getElementById('rev').value)||0;
+  var rows=[], missing=0, covered=0, bad=[];
+  for(var i=0;i<lines.length;i++){
+    var parts=lines[i].split('|').map(s=>s.trim());
+    var ref=normRef(parts[3]);
+    if(!ref){ missing++; bad.push({line:lines[i], why:'no DDS reference recorded on this line'}); }
+    else covered++;
+  }
+  var out=document.getElementById('risk-out');
+  if(!lines.length){ alert('Paste at least one delivery line.'); return; }
+  out.style.display='block';
+  var pct=lines.length?Math.round(covered/lines.length*100):0;
+  document.getElementById('risk-total').textContent=covered+'/'+lines.length+' deliveries with a reference ('+pct+'%)';
+  var detail='<ul>';
+  detail+='<li>'+missing+' line'+(missing>1?'s':'')+' with no reference number recorded'+(missing?' — under Art. 5(3) a first downstream operator must keep the numbers for the products it places on the market':'.')+'</li>';
+  if(missing){
+    detail+='<li>Sanction risk on unreported product: fines of at least 4% of EU-wide turnover apply chain-wide for non-compliance — your share of the exposure at '+money(rev)+' turnover is up to <b style="color:var(--fg)">'+money(Math.round(rev*0.04/1000)*1000)+'</b> against the entire obligation (Art. 4(4) as amended).</li>';
+    detail+='<li>A customs check without a valid reference can hold the goods at release — and the good-faith assumption (FAQ 3.4) is unavailable if you <i>knew</i> the supplier is an operator but chose not to record.</li>';
+  } else {
+    detail+='<li>Every line carries a reference: the record is complete. This is what a 5-year audit trail looks like when it exists.</li>';
+  }
+  detail+='</ul><p style="margin-left:18px;margin-top:6px">The reference-number discipline runs from 30 December 2026 — companies that start now are the ones with a complete record when the first audit lands.</p>';
+  document.getElementById('risk-detail').innerHTML=detail;
+  document.getElementById('risk-cta').innerHTML='Your ledger, audit-ready, from €49/month — <a class="cta" style="margin:8px 0 0" href="https://buy.stripe.com/eVqbIU49B15Vf1D8jJ3sI0u" rel="noopener" target="_blank">Build the record</a>';
+}
+document.getElementById('rev').addEventListener('input',run);
+/* ——— étoiles cliquables ——— */
+(function(){
+  var box=document.getElementById('rv_stars');
+  var hidden=document.getElementById('rv_score');
+  var hint=document.getElementById('rv_star_hint');
+  var stars=box.querySelectorAll('.star');
+  function paint(v){
+    stars.forEach(function(st,i){ if(i<v) st.classList.add('on'); else st.classList.remove('on'); });
+    hidden.value=v;
+    hint.textContent='Rating: '+v+'/5.';
+  }
+  stars.forEach(function(st){
+    st.addEventListener('click',function(){ paint(parseInt(st.getAttribute('data-v'),10)); });
+  });
+  paint(5);
+})();
+function sendReview(e){
+  e.preventDefault();
+  var score=document.getElementById('rv_score').value;
+  var email=document.getElementById('rv_email').value.trim();
+  var comment=document.getElementById('rv_comment').value.trim();
+  if(!comment){ alert('Please write a short comment.'); return false; }
+  var subj=encodeURIComponent('FirstDownstream review — '+score+'/5');
+  var body=encodeURIComponent('Rating: '+score+'/5\n\n'+comment+'\n\n— '+email);
+  window.location.href='mailto:nypsus.business@gmail.com?subject='+subj+'&body='+body;
+  document.getElementById('rv_email').value='';
+  document.getElementById('rv_comment').value='';
+  document.getElementById('revok').innerHTML='Your review email has been opened — thank you.';
+  return false;
+}
+function signup(e){
+  e.preventDefault();
+  var email=document.getElementById('se').value.trim();
+  var sp=document.getElementById('sp').value.trim();
+  var sa=document.getElementById('sa').value.trim();
+  var subj=encodeURIComponent('FirstDownstream — contact');
+  var body=encodeURIComponent('Email: '+email+'\nCompany / role: '+sp+'\nCommodities: '+sa+'\n\nI prefer to be contacted before subscribing.');
+  window.location.href='mailto:nypsus.business@gmail.com?subject='+subj+'&body='+body;
+  document.getElementById('se').value='';
+  document.getElementById('sp').value='';
+  document.getElementById('sa').value='';
+  document.getElementById('signok').innerHTML='Your email has been opened — we\'ll reply within 24 working hours.';
+  return false;
+}
+/* ——— scroll reveal progressif (fallback 4s, reduced-motion respecté) ——— */
+(function(){
+  var els=[].slice.call(document.querySelectorAll('.rv'));
+  var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced||!('IntersectionObserver' in window)){
+    els.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; });
+    return;
+  }
+  els.forEach(function(el){ el.style.opacity='0'; el.style.transform='translateY(14px)'; el.style.transition='opacity .6s ease, transform .6s ease'; });
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.style.opacity='1'; en.target.style.transform='none'; io.unobserve(en.target); } });
+  },{threshold:.08});
+  els.forEach(function(el){ io.observe(el); });
+  setTimeout(function(){
+    els.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; });
+  },4000);
+})();
+</script>
+</body>
+</html>
