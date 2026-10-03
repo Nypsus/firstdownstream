@@ -76,15 +76,30 @@ footer{margin-top:56px;text-align:center;font-size:.82rem;color:var(--mut)}
 .fig svg{width:100%;height:auto;display:block}
 .figcap{font-size:.78rem;color:var(--mut);text-align:center;margin:10px 0 2px}
 .herofig{margin:26px auto 8px;max-width:760px}
+/* ——— progression de scroll (barre fine en haut) ——— */
+#scrollbar{position:fixed;top:0;left:0;height:3px;width:100%;transform:scaleX(0);transform-origin:0 50%;background:linear-gradient(90deg,var(--acc2),var(--acc));z-index:60;will-change:transform;box-shadow:0 0 12px var(--acc-glow)}
+/* ——— halo léger qui suit le pointeur / le scroll (héros) ——— */
+header{--mx:50%;--my:0%;overflow:hidden}
+.hero-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(360px 240px at var(--mx) var(--my),rgba(61,139,255,.20),transparent 66%);opacity:.85;transition:opacity .4s;mix-blend-mode:screen}
+/* ——— bloc « what you get » (visuel des livrables) ——— */
+.getgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:20px 0 6px}
+.get{background:#0d1520;border:1px solid var(--line);border-radius:15px;padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .18s,transform .18s}
+.get:hover{border-color:rgba(61,139,255,.55);transform:translateY(-2px)}
+.get>div{min-width:0}
+.get svg{flex-shrink:0}
+.get b{display:block;color:var(--fg);margin-bottom:4px;font-size:.98rem}
+.get span{font-size:.86rem;color:var(--mut);display:block}
 /* ——— effets de scroll (progressive : tout reste visible sans JS) ——— */
-.rv{will-change:opacity,transform}
-@media(max-width:720px){h1{font-size:1.55rem}.optgrid{grid-template-columns:1fr}.step{grid-template-columns:50px 1fr;gap:12px}.step .ico{width:50px;height:50px}.split{grid-template-columns:1fr;gap:20px}}
+.rv{will-change:opacity,transform,clip-path}
+@media(max-width:720px){h1{font-size:1.55rem}.optgrid{grid-template-columns:1fr}.getgrid{grid-template-columns:1fr}.step{grid-template-columns:50px 1fr;gap:12px}.step .ico{width:50px;height:50px}.split{grid-template-columns:1fr;gap:20px}}
 </style>
 </head>
 <body>
+<div id="scrollbar" aria-hidden="true"></div>
 <main>
 <header>
   <div class="eyebrow">EUDR · 30 December 2026 · coffee, cocoa, wood, rubber, palm oil, soy, cattle</div>
+  <div class="hero-glow" aria-hidden="true"></div>
   <div class="logo">First<span>Downstream</span></div>
   <h1>Your supplier's EUDR reference number arrives with the goods.<br>If you can't show it in 2027, customs and auditors will — and it's gone.</h1>
 
@@ -100,9 +115,9 @@ footer{margin-top:56px;text-align:center;font-size:.82rem;color:var(--mut)}
 <div class="split">
   <div class="rv">
     <div style="font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:6px">Concrete example</div>
-    <h3 style="margin-top:0">A €12M coffee roaster, one missing number, a €480,000 exposure.</h3>
-    <p>A German roaster buys green coffee from an importer. From 30 December 2026, the importer must pass on the DDS reference number for each shipment (Art. 4(7)); the roaster — the <b style="color:var(--fg)">first downstream operator</b> — must record it and keep it <b style="color:var(--fg)">5 years</b>.</p>
-    <p>An audit or a customs check (non-compliance: fines of <b style="color:var(--fg)">at least 4% of EU-wide annual turnover</b>) asks for the records. The roaster's ERP has purchase orders, but nobody logged reference numbers — goods receipts are filed in a shared drive, half scanned. The authority cannot verify traceability in time and the goods stay blocked, flags a non-compliance, or both.</p>
+    <h3 style="margin-top:0">A €12M coffee roaster, one missing number, a <span data-count-to="480000" data-count-prefix="€">€480,000</span> exposure.</h3>
+    <p>A German roaster buys green coffee from an importer. From 30 December 2026, the importer must pass on the DDS reference number for each shipment (Art. 4(7)); the roaster — the <b style="color:var(--fg)">first downstream operator</b> — must record it and keep it <b style="color:var(--fg)"><span data-count-to="5">5</span> years</b>.</p>
+    <p>An audit or a customs check (non-compliance: fines of <b style="color:var(--fg)">at least <span data-count-to="4">4</span>% of EU-wide annual turnover</b>) asks for the records. The roaster's ERP has purchase orders, but nobody logged reference numbers — goods receipts are filed in a shared drive, half scanned. The authority cannot verify traceability in time and the goods stay blocked, flags a non-compliance, or both.</p>
     <p class="acc">FirstDownstream: €49/month, deliveries logged the day they arrive, reference numbers matched to goods receipts, one-click audit export. The roaster's 5-year record is complete, per delivery, per supplier.</p>
   </div>
   <div class="photo rv">
@@ -192,6 +207,45 @@ footer{margin-top:56px;text-align:center;font-size:.82rem;color:var(--mut)}
     <p class="figcap">Not another geospatial platform. The first-downstream duty is record-keeping — this is the record.</p>
   </div>
   <p class="hint">Backed by the roles in the amended Regulation (EU) 2023/1115 (Reg. (EU) 2025/2650): only the first downstream operator or trader collects and keeps reference numbers — further downstream actors don't. If your supplier passes a number to you, you are the first downstream buyer (European Commission FAQ no. 3.4).</p>
+</div>
+
+<h2>What you get</h2>
+<div class="card rv">
+  <div class="getgrid">
+    <div class="get">
+      <svg viewBox="0 0 40 40" width="38" height="38" role="img" aria-label="DDS reference-number ledger">
+        <rect x="6" y="5" width="28" height="30" rx="4" fill="none" stroke="#3d8bff" stroke-width="2.2"/>
+        <path d="M11 13h13M11 19h18M11 25h9" stroke="#9aa7b4" stroke-width="2.1" stroke-linecap="round"/>
+        <path d="M25 27l4 4 6-8" fill="none" stroke="#3ddc97" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div><b>The DDS reference ledger</b><span>Every number you receive, one row per delivery — the record Art. 5(3) asks for.</span></div>
+    </div>
+    <div class="get">
+      <svg viewBox="0 0 40 40" width="38" height="38" role="img" aria-label="Inbound capture of the reference number">
+        <path d="M9 8h22v14H9z" fill="none" stroke="#3d8bff" stroke-width="2.2"/>
+        <path d="M9 9l11 8 11-8" fill="none" stroke="#3d8bff" stroke-width="2.2"/>
+        <path d="M20 25v9M20 34l-4.5-4.5M20 34l4.5-4.5" fill="none" stroke="#3ddc97" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div><b>Inbound capture</b><span>Log or paste the number when goods arrive — form, supplier email or delivery note.</span></div>
+    </div>
+    <div class="get">
+      <svg viewBox="0 0 40 40" width="38" height="38" role="img" aria-label="Reference number assigned to its delivery">
+        <rect x="4" y="14" width="13" height="12" rx="3" fill="none" stroke="#3d8bff" stroke-width="2.2"/>
+        <rect x="23" y="14" width="13" height="12" rx="3" fill="none" stroke="#3d8bff" stroke-width="2.2"/>
+        <path d="M17 20h6" stroke="#3ddc97" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M19 10l4 4-4 4" fill="none" stroke="#9aa7b4" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div><b>Number &rarr; delivery</b><span>Each reference tied to its goods receipt, batch and purchase order, with supplier master data.</span></div>
+    </div>
+    <div class="get">
+      <svg viewBox="0 0 40 40" width="38" height="38" role="img" aria-label="Five-year audit pack export">
+        <path d="M6 11h10l3 4h15v18H6z" fill="none" stroke="#3d8bff" stroke-width="2.2" stroke-linejoin="round"/>
+        <path d="M14 24l4 4 8-9" fill="none" stroke="#3ddc97" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div><b>The 5-year audit pack</b><span>One-click export per supplier, product or delivery, ready whenever the authority asks.</span></div>
+    </div>
+  </div>
+  <p class="figcap">The record the regulation asks for, in place before the first audit — not rebuilt after it.</p>
 </div>
 
 <h2 id="pricing">Pricing</h2>
@@ -351,22 +405,111 @@ function signup(e){
   document.getElementById('signok').innerHTML='Your email has been opened — we\'ll reply within 24 working hours.';
   return false;
 }
-/* ——— scroll reveal progressif (fallback 4s, reduced-motion respecté) ——— */
+/* ——— effets pilotés par le scroll : progression, révélations par masque + décalage
+       dégressif, parallaxe légère des photos, compteurs animés, halo du héros.
+       Progressif : sans JS ou en reduced-motion, la page reste entièrement lisible. ——— */
 (function(){
-  var els=[].slice.call(document.querySelectorAll('.rv'));
   var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduced||!('IntersectionObserver' in window)){
-    els.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; });
-    return;
+  var els=[].slice.call(document.querySelectorAll('.rv'));
+  var bar=document.getElementById('scrollbar');
+
+  function progress(){
+    var h=document.documentElement;
+    var max=(h.scrollHeight-h.clientHeight)||1;
+    var top=h.scrollTop||document.body.scrollTop||window.pageYOffset||0;
+    var p=Math.max(0,Math.min(1,top/max));
+    if(bar) bar.style.transform='scaleX('+p+')';
   }
-  els.forEach(function(el){ el.style.opacity='0'; el.style.transform='translateY(14px)'; el.style.transition='opacity .6s ease, transform .6s ease'; });
-  var io=new IntersectionObserver(function(entries){
-    entries.forEach(function(en){ if(en.isIntersecting){ en.target.style.opacity='1'; en.target.style.transform='none'; io.unobserve(en.target); } });
-  },{threshold:.08});
-  els.forEach(function(el){ io.observe(el); });
-  setTimeout(function(){
-    els.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; });
-  },4000);
+
+  /* halo qui suit le pointeur sur le héros */
+  var hero=document.querySelector('header');
+  if(hero&&!reduced){
+    hero.addEventListener('pointermove',function(e){
+      var r=hero.getBoundingClientRect();
+      hero.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+      hero.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+    });
+  }
+
+  /* révélations : masque (clip-path) + décalage dégressif entre frères */
+  if(reduced||!('IntersectionObserver' in window)){
+    els.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; el.style.clipPath='none'; });
+  } else {
+    els.forEach(function(el){
+      el.style.opacity='0';
+      el.style.transform='translateY(18px)';
+      el.style.clipPath='inset(0 0 24% 0)';
+      el.style.transition='opacity .7s ease, transform .7s cubic-bezier(.22,.61,.36,1), clip-path .8s cubic-bezier(.22,.61,.36,1)';
+    });
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var el=en.target;
+          var sibs=[].slice.call(el.parentNode.children).filter(function(s){ return s.classList.contains('rv'); });
+          var idx=Math.max(0,sibs.indexOf(el));
+          el.style.transitionDelay=(Math.min(idx,4)*0.08)+'s';
+          el.style.opacity='1'; el.style.transform='none'; el.style.clipPath='none';
+          io.unobserve(el);
+        }
+      });
+    },{threshold:.1});
+    els.forEach(function(el){ io.observe(el); });
+    var safety=setTimeout(function(){
+      els.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; el.style.clipPath='none'; });
+    },5000);
+    window.__fdReveal=function(){ clearTimeout(safety); };
+  }
+
+  /* parallaxe légère sur les photos (conteneur overflow:hidden => aucun débordement) */
+  var paras=[].slice.call(document.querySelectorAll('.photo img'));
+  if(!reduced&&paras.length){
+    paras.forEach(function(p){ p.style.willChange='transform'; });
+    var ticking=false;
+    function onScroll(){
+      if(ticking) return; ticking=true;
+      requestAnimationFrame(function(){
+        var vh=window.innerHeight||1;
+        paras.forEach(function(p){
+          var r=p.getBoundingClientRect();
+          var rel=(r.top+r.height/2-vh/2)/vh;
+          var shift=Math.max(-16,Math.min(16,-rel*20));
+          p.style.transform='translate3d(0,'+shift.toFixed(1)+'px,0) scale(1.045)';
+        });
+        progress();
+        ticking=false;
+      });
+    }
+    window.addEventListener('scroll',onScroll,{passive:true});
+    window.addEventListener('resize',onScroll);
+    onScroll();
+  } else {
+    window.addEventListener('scroll',progress,{passive:true});
+    progress();
+  }
+
+  /* compteurs animés sur les chiffres clés */
+  var nums=[].slice.call(document.querySelectorAll('[data-count-to]'));
+  if(nums.length&&!reduced&&'IntersectionObserver' in window){
+    function animate(el){
+      var to=parseFloat(el.getAttribute('data-count-to'))||0;
+      var pre=el.getAttribute('data-count-prefix')||'';
+      var suf=el.getAttribute('data-count-suffix')||'';
+      var start=null,dur=1100;
+      function fmt(v){ return pre+v.toLocaleString('en-US',{maximumFractionDigits:0})+suf; }
+      function step(ts){
+        if(start===null) start=ts;
+        var t=Math.min(1,(ts-start)/dur);
+        var e=1-Math.pow(1-t,3);
+        el.textContent=fmt(to*e);
+        if(t<1) requestAnimationFrame(step); else el.textContent=fmt(to);
+      }
+      requestAnimationFrame(step);
+    }
+    var nio=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ animate(en.target); nio.unobserve(en.target); } });
+    },{threshold:.5});
+    nums.forEach(function(n){ nio.observe(n); });
+  }
 })();
 </script>
 </body>
