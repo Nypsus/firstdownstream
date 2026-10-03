@@ -146,15 +146,15 @@ header .eyebrow,header .logo,header h1,header .photo,header .sub,header p.rv{pos
 #motion-ctl button:hover{filter:brightness(1.08)}</style>
 <script id="mf-ctl-js">
 (function(){
- var mf=(function(){try{return localStorage.getItem('motion_force')==='1'}catch(e){return false}})();
+ var off=(function(){try{return localStorage.getItem('motion_off')==='1'}catch(e){return false}})();
  var rm=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
- if(mf&&rm){try{for(var s=0;s<document.styleSheets.length;s++){var sh=document.styleSheets[s],rules;try{rules=sh.cssRules}catch(e){continue}if(!rules)continue;
+ if(!off){try{for(var s=0;s<document.styleSheets.length;s++){var sh=document.styleSheets[s],rules;try{rules=sh.cssRules}catch(e){continue}if(!rules)continue;
   for(var i=rules.length-1;i>=0;i--){var r=rules[i];var txt=(r.media&&r.media.mediaText)||'';if(txt.indexOf('prefers-reduced-motion')>-1){for(var j=r.cssRules.length-1;j>=0;j--){try{r.deleteRule(j)}catch(e){}}}}}}catch(e){}}
  function ctl(){var d=document.createElement('div');d.id='motion-ctl';
-  d.innerHTML='<button type="button" title="Vous pouvez recouper les animations">'+(mf?'\u2715 Couper les animations':'\u25B6 Activer les animations')+'</button>';
-  d.querySelector('button').onclick=function(){try{if(mf){localStorage.removeItem('motion_force')}else{localStorage.setItem('motion_force','1')}}catch(e){};location.reload();};
+  d.innerHTML='<button type="button">'+(off?'\u25B6 Activer les animations':'\u2715 Couper les animations')+'</button>';
+  d.querySelector('button').onclick=function(){try{if(off){localStorage.removeItem('motion_off')}else{localStorage.setItem('motion_off','1')}}catch(e){};location.reload();};
   document.body.appendChild(d);}
- if(rm||mf){if(document.body){ctl()}else{document.addEventListener('DOMContentLoaded',ctl)}}
+ if(rm||off){if(document.body){ctl()}else{document.addEventListener('DOMContentLoaded',ctl)}}
 })();
 </script>
 </head>
@@ -521,7 +521,7 @@ function signup(e){
        l'une par-dessus l'autre, cascade des révélations, parallaxe, compteurs.
        tout le contenu est visible sans JS ; prefers-reduced-motion respecté. ——— */
 (function(){
-  var __mf=(function(){try{return localStorage.getItem('motion_force')==='1'}catch(e){return false}})();var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches&&!__mf;
+  var __mo=(function(){try{return localStorage.getItem('motion_off')==='1'}catch(e){return false}})();var reduced=__mo;
   var hasGSAP=typeof window.gsap!=='undefined';
   var hasST=hasGSAP&&typeof window.ScrollTrigger!=='undefined';
   var hasLenis=typeof window.Lenis!=='undefined';
