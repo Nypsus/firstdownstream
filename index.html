@@ -425,7 +425,7 @@ function sendReview(e){
   window.location.href='mailto:nypsus.business@gmail.com?subject='+subj+'&body='+body;
   document.getElementById('rv_email').value='';
   document.getElementById('rv_comment').value='';
-  document.getElementById('revok').innerHTML='Your review email has been opened — thank you.';
+  var ok=document.getElementById('revok'); if(ok) ok.innerHTML='Your review email has been opened — thank you.';
   return false;
 }
 function signup(e){
@@ -439,7 +439,7 @@ function signup(e){
   document.getElementById('se').value='';
   document.getElementById('sp').value='';
   document.getElementById('sa').value='';
-  document.getElementById('signok').innerHTML='Your email has been opened — we\'ll reply within 24 working hours.';
+  var ok=document.getElementById('signok'); if(ok) ok.innerHTML='Your email has been opened — we\'ll reply within 24 working hours.';
   return false;
 }
 /* ——— moteur de scroll (consolidé) : Lenis + GSAP ScrollTrigger, libs vendorisées.
