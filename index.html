@@ -107,6 +107,39 @@ html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto !important}
 .lenis.lenis-stopped{overflow:hidden}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+/* ——— v3 : effets dynamiques amplifiés ——— */
+/* lumière pointeur nette + plans lumineux du héros */
+.hero-spot{position:absolute;left:0;top:0;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;pointer-events:none;opacity:0;background:radial-gradient(closest-side,rgba(150,198,255,.30),rgba(61,139,255,.12) 46%,transparent 72%);mix-blend-mode:screen;will-change:transform;z-index:1;transition:opacity .5s}
+.orb{position:absolute;border-radius:50%;filter:blur(46px);pointer-events:none;will-change:transform;z-index:0}
+.orb.a{width:300px;height:300px;left:-70px;top:-50px;background:radial-gradient(closest-side,rgba(61,139,255,.55),transparent 70%)}
+.orb.b{width:230px;height:230px;right:-60px;top:130px;background:radial-gradient(closest-side,rgba(43,111,224,.5),transparent 70%)}
+header .eyebrow,header .logo,header h1,header .photo,header .sub,header p.rv{position:relative;z-index:2}
+/* ——— bande horizontale pilotée par le scroll (galerie des visuels / du registre) ——— */
+.hband{position:relative;margin:36px 0;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.hband.js-on{overflow:hidden;cursor:grab}
+.hband .htrack{display:flex;gap:20px;padding:6px 2px 16px}
+.hband .panel{flex:0 0 auto;width:min(78vw,470px);background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;box-shadow:0 16px 44px rgba(0,0,0,.42)}
+.hband .panel img{width:100%;height:310px;object-fit:cover;display:block}
+.hband .panel .plabel{position:absolute;left:0;right:0;bottom:0;padding:38px 16px 14px;font-size:.86rem;font-weight:700;color:#eaf0f8;background:linear-gradient(180deg,transparent,rgba(11,16,22,.92))}
+.hband.js-on .htrack{will-change:transform}
+/* ——— registre : révélé ligne par ligne ——— */
+.ledger{margin:20px 0 4px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#0d1520}
+.ledger .lrow{display:grid;grid-template-columns:1fr 1.15fr 1.35fr 1.5fr;border-top:1px solid var(--line)}
+.ledger .lrow:first-child{border-top:none}
+.ledger .lrow.head{background:#0b1016;font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;font-weight:700}
+.ledger .lcell{padding:11px 13px;font-size:.84rem;border-left:1px solid var(--line);min-width:0;overflow-wrap:anywhere;color:var(--fg)}
+.ledger .lrow.head .lcell{color:var(--mut)}
+.ledger .lref{font-family:ui-monospace,Consolas,monospace;color:var(--ok);font-size:.79rem}
+.ledger .lmiss{color:var(--bad)}
+@media(max-width:720px){
+  .ledger .lrow{grid-template-columns:1fr 1fr}
+  .ledger .lcell{padding:9px 11px;font-size:.78rem}
+  .hband{overflow:hidden}
+  .hband .htrack{flex-direction:column;gap:16px}
+  .hband .panel{width:100%}
+  .hband .panel img{height:220px}
+}
+@media (prefers-reduced-motion: reduce){.orb,.hero-spot{display:none}}
 </style>
 </head>
 <body>
@@ -115,6 +148,9 @@ html.lenis,html.lenis body{height:auto}
 <header>
   <div class="eyebrow">EUDR · 30 December 2026 · coffee, cocoa, wood, rubber, palm oil, soy, cattle</div>
   <div class="hero-glow" aria-hidden="true"></div>
+  <div class="orb a" aria-hidden="true"></div>
+  <div class="orb b" aria-hidden="true"></div>
+  <div class="hero-spot" aria-hidden="true"></div>
   <div class="logo">First<span>Downstream</span></div>
   <h1>Your supplier's EUDR reference number arrives with the goods.<br>If you can't show it in 2027, customs and auditors will — and it's gone.</h1>
 
@@ -135,10 +171,20 @@ html.lenis,html.lenis body{height:auto}
     <p>An audit or a customs check (non-compliance: fines of <b style="color:var(--fg)">at least <span data-count-to="4">4</span>% of EU-wide annual turnover</b>) asks for the records. The roaster's ERP has purchase orders, but nobody logged reference numbers — goods receipts are filed in a shared drive, half scanned. The authority cannot verify traceability in time and the goods stay blocked, flags a non-compliance, or both.</p>
     <p class="acc">FirstDownstream: €49/month, deliveries logged the day they arrive, reference numbers matched to goods receipts, one-click audit export. The roaster's 5-year record is complete, per delivery, per supplier.</p>
   </div>
-  <div class="photo rv">
+  <div class="photo">
     <img width="1200" height="800" src="assets/warehouse.jpg" alt="Modern logistics warehouse — inbound goods where the DDS reference number must be captured on arrival" loading="lazy">
   </div>
 </div>
+
+<section class="hband" aria-label="The ledger, at a glance">
+  <div class="htrack">
+    <figure class="panel"><img src="assets/logistics-container.jpg" alt="Container ship — the DDS reference number travels with the goods from importer to first downstream buyer" loading="lazy"><figcaption class="plabel">The reference number arrives with the delivery.</figcaption></figure>
+    <figure class="panel"><img src="assets/warehouse.jpg" alt="Modern logistics warehouse — inbound goods where the DDS reference number must be captured on arrival" loading="lazy"><figcaption class="plabel">Captured on arrival, tied to the goods receipt.</figcaption></figure>
+    <figure class="panel"><img src="assets/deliverable-auditpack.png" alt="Sample export: a DDS Reference Ledger audit pack listing reference numbers against goods receipts, purchase orders and suppliers" loading="lazy"><figcaption class="plabel">One row per delivery, kept five years.</figcaption></figure>
+    <figure class="panel"><img src="assets/coffee-grain.jpg" alt="Coffee beans — coffee, cocoa, wood, rubber, palm oil, soy and cattle fall under the EUDR duty" loading="lazy"><figcaption class="plabel">Coffee, cocoa, wood, rubber, palm oil, soy, cattle.</figcaption></figure>
+    <figure class="panel"><img src="assets/grain-1447933601403-0c6688de566e.jpg" alt="Grain — the record the regulation asks for, in place before the first audit" loading="lazy"><figcaption class="plabel">The record the regulation asks for, in place before the first audit.</figcaption></figure>
+  </div>
+</section>
 
 <h2>How it works</h2>
 <div class="card" id="howcard">
@@ -220,6 +266,18 @@ html.lenis,html.lenis body{height:auto}
       <text x="350" y="190" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3ddc97">traceability complete — without a GIS team</text>
     </svg>
     <p class="figcap">Not another geospatial platform. The first-downstream duty is record-keeping — this is the record.</p>
+  </div>
+  <div class="ledger" role="table" aria-label="Sample DDS reference ledger — one row per delivery">
+    <div class="lrow head" role="row">
+      <div class="lcell" role="columnheader">Date</div>
+      <div class="lcell" role="columnheader">Supplier</div>
+      <div class="lcell" role="columnheader">Product</div>
+      <div class="lcell" role="columnheader">DDS reference</div>
+    </div>
+    <div class="lrow" role="row"><div class="lcell" role="cell">2026-09-02</div><div class="lcell" role="cell">VerdeTrading GmbH</div><div class="lcell" role="cell">green coffee 2&times;60kg bags</div><div class="lcell" role="cell"><span class="lref">EUDR-REF-2026-103874</span></div></div>
+    <div class="lrow" role="row"><div class="lcell" role="cell">2026-09-15</div><div class="lcell" role="cell">VerdeTrading GmbH</div><div class="lcell" role="cell">green coffee 5&times;60kg bags</div><div class="lcell" role="cell"><span class="lref">EUDR-REF-2026-112905</span></div></div>
+    <div class="lrow" role="row"><div class="lcell" role="cell">2026-09-28</div><div class="lcell" role="cell">Meridian Cocoa BV</div><div class="lcell" role="cell">cocoa beans 3&times;65kg bags</div><div class="lcell" role="cell"><span class="lref">EUDR-REF-2026-118442</span></div></div>
+    <div class="lrow" role="row"><div class="lcell" role="cell">2026-10-01</div><div class="lcell" role="cell">Nordwood SA</div><div class="lcell" role="cell">oak veneer 4 pallets</div><div class="lcell" role="cell"><span class="lmiss">not received yet</span></div></div>
   </div>
   <p class="hint">Backed by the roles in the amended Regulation (EU) 2023/1115 (Reg. (EU) 2025/2650): only the first downstream operator or trader collects and keeps reference numbers — further downstream actors don't. If your supplier passes a number to you, you are the first downstream buyer (European Commission FAQ no. 3.4).</p>
 </div>
@@ -461,13 +519,21 @@ function signup(e){
     if(bar) bar.style.transform='scaleX('+Math.max(0,Math.min(1,top/max))+')';
   }
 
-  /* halo qui suit le pointeur (héros) — indépendant des libs */
+  /* lumière pointeur (héros) — indépendante des libs */
   var hero=document.querySelector('header');
+  var heroSpot=hero?hero.querySelector('.hero-spot'):null;
+  var tgtX=0,tgtY=0,curX=0,curY=0,spotOn=false;
   if(hero&&!reduced){
+    if(heroSpot){
+      hero.addEventListener('pointerenter',function(){ heroSpot.style.opacity='1'; });
+      hero.addEventListener('pointerleave',function(){ heroSpot.style.opacity='0'; });
+    }
     hero.addEventListener('pointermove',function(e){
       var r=hero.getBoundingClientRect();
-      hero.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
-      hero.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+      var x=e.clientX-r.left,y=e.clientY-r.top;
+      hero.style.setProperty('--mx',(x/r.width*100)+'%');
+      hero.style.setProperty('--my',(y/r.height*100)+'%');
+      tgtX=x;tgtY=y;spotOn=true;
     });
   }
 
@@ -500,34 +566,62 @@ function signup(e){
     });
   }
 
+  /* ---- spot pointeur lissé, sur l'unique boucle GSAP (une seule rAF) ---- */
+  if(heroSpot){
+    heroSpot.style.transform='translate3d(-9999px,0,0)';
+    gsap.ticker.add(function(){
+      curX+=(tgtX-curX)*0.14; curY+=(tgtY-curY)*0.14;
+      if(spotOn) heroSpot.style.transform='translate3d('+curX+'px,'+curY+'px,0)';
+    });
+  }
+
   /* ---- repère de progression ---- */
   gsap.fromTo(bar,{scaleX:0},{scaleX:1,ease:'none',
     scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:.3}});
 
-  /* ---- scène 1 · héros : timeline scrubée (image qui s'ouvre + texte qui dérive) ---- */
+  /* ---- scène 1 · héros : entrée + parallaxe multi-plans + timeline scrubée ---- */
   if(hero){
     var hImg=hero.querySelector('.photo img');
+    var hPhoto=hero.querySelector('.photo');
     var hGlow=hero.querySelector('.hero-glow');
-    var scene=gsap.timeline({scrollTrigger:{trigger:hero,start:'top top',end:'+=85%',scrub:1}});
-    if(hImg){
-      scene.fromTo(hImg,{scale:1.02},{scale:1.17,ease:'none'},0);
-      scene.fromTo(hero.querySelector('.photo'),{clipPath:'inset(0% 0% 0% 0%)'},{clipPath:'inset(0% 0% 0% 0%)',ease:'none'},0);
-    }
-    if(hGlow) scene.fromTo(hGlow,{opacity:.85},{opacity:0,ease:'none'},0);
-    scene.fromTo(hero.querySelector('h1'),{yPercent:0},{yPercent:-13,ease:'none'},0);
-    scene.fromTo(hero.querySelector('.logo'),{yPercent:0},{yPercent:-34,ease:'none'},0);
-    scene.fromTo(hero.querySelector('.eyebrow'),{yPercent:0,opacity:1},{yPercent:-46,opacity:0,ease:'none'},0);
-    scene.fromTo(hero.querySelector('.sub'),{yPercent:0},{yPercent:7,ease:'none'},0);
+    var orbs=hero.querySelectorAll('.orb');
+    var eEye=hero.querySelector('.eyebrow'), eLogo=hero.querySelector('.logo'),
+        eH1=hero.querySelector('h1'), eSub=hero.querySelector('.sub'),
+        eCta=hero.querySelector('p.rv');
+
+    var intro=gsap.timeline({defaults:{ease:'power3.out'}});
+    if(eEye) intro.from(eEye,{opacity:0,y:-18,duration:.55});
+    if(eLogo) intro.from(eLogo,{opacity:0,y:22,duration:.55},'-=.3');
+    if(eH1) intro.from(eH1,{opacity:0,y:38,duration:.8},'-=.3');
+    if(hPhoto) intro.from(hPhoto,{opacity:0,y:44,duration:.9},'-=.55');
+    if(eSub) intro.from(eSub,{opacity:0,y:26,duration:.7},'-=.6');
+    if(eCta) intro.from(eCta,{opacity:0,y:26,duration:.7},'-=.55');
+
+    var scene=gsap.timeline({scrollTrigger:{trigger:hero,start:'top top',end:'+=95%',scrub:1}});
+    if(hImg) scene.fromTo(hImg,{scale:1.32,yPercent:-6},{scale:1.05,yPercent:8,ease:'none'},0);
+    if(hPhoto) scene.fromTo(hPhoto,{clipPath:'inset(7% 9% 7% 9% round 30px)'},{clipPath:'inset(0% 0% 0% 0% round 18px)',ease:'none'},0);
+    if(hGlow) scene.fromTo(hGlow,{opacity:1,scale:1},{opacity:.12,scale:1.3,ease:'none'},0);
+    if(orbs.length) scene.fromTo(orbs,{yPercent:0,opacity:.6},{yPercent:-90,opacity:.15,stagger:.12,ease:'none'},0);
+    if(eH1) scene.fromTo(eH1,{yPercent:0},{yPercent:-20,ease:'none'},0);
+    if(eLogo) scene.fromTo(eLogo,{yPercent:0},{yPercent:-46,ease:'none'},0);
+    if(eEye) scene.fromTo(eEye,{yPercent:0,opacity:1},{yPercent:-80,opacity:0,ease:'none'},0);
+    if(eSub) scene.fromTo(eSub,{yPercent:-6},{yPercent:12,ease:'none'},0);
+    if(eCta) scene.fromTo(eCta,{yPercent:0,opacity:1},{yPercent:18,opacity:.15,ease:'none'},0);
   }
 
-  /* ---- scène 2 · « How it works » épinglée : les 3 étapes se révèlent au scroll ---- */
+  /* ---- scène 2 · « How it works » épinglée : les 3 étapes se transforment au scroll ---- */
   var how=document.getElementById('howcard');
   if(how&&wide){
     var steps=gsap.utils.toArray('#howcard .step');
-    gsap.set(steps,{opacity:.18,y:26});
-    var howTl=gsap.timeline({scrollTrigger:{trigger:how,start:'top 96px',end:'+=120%',pin:true,scrub:1}});
-    howTl.to(steps,{opacity:1,y:0,duration:1,stagger:.85,ease:'power2.out'},0)
-         .to({},{duration:.4});
+    gsap.set(steps,{opacity:.12,y:40,rotateX:12,transformPerspective:800});
+    var howTl=gsap.timeline({scrollTrigger:{trigger:how,start:'top 90px',end:'+=130%',pin:true,scrub:1}});
+    howTl.to(steps,{opacity:1,y:0,rotateX:0,duration:1,stagger:.8,ease:'power2.out'},0)
+         .to({},{duration:.35});
+  }else if(how){
+    gsap.utils.toArray('#howcard .step').forEach(function(s,i){
+      gsap.fromTo(s,{opacity:0,x:(i%2?60:-60),rotate:(i%2?1.4:-1.4)},{opacity:1,x:0,rotate:0,duration:.8,ease:'power3.out',
+        scrollTrigger:{trigger:s,start:'top 90%',once:true}});
+    });
   }
 
   /* ---- scène 3 · cartes de prix : chacune glisse par-dessus la précédente ---- */
@@ -548,19 +642,86 @@ function signup(e){
     });
   }
 
-  /* ---- cascade des révélations ---- */
-  ScrollTrigger.batch('.rv',{interval:.14,batchMax:4,start:'top 90%',once:true,
+  /* ---- titres de section : masque qui se lève ---- */
+  gsap.utils.toArray('h2').forEach(function(h){
+    gsap.fromTo(h,{opacity:0,y:34,clipPath:'inset(0 0 100% 0)'},{opacity:1,y:0,clipPath:'inset(0 0 0% 0)',duration:.85,ease:'power3.out',
+      scrollTrigger:{trigger:h,start:'top 92%',once:true}});
+  });
+
+  /* ---- cascade des révélations (cartes .rv) ---- */
+  ScrollTrigger.batch('.rv',{interval:.12,batchMax:4,start:'top 90%',once:true,
     onEnter:function(batch){
-      gsap.fromTo(batch,{opacity:0,y:28,clipPath:'inset(0 0 16% 0)'},
-        {opacity:1,y:0,clipPath:'inset(0 0 0% 0)',duration:.85,stagger:.1,ease:'power3.out',overwrite:true});
+      gsap.fromTo(batch,{opacity:0,y:36,clipPath:'inset(0 0 14% 0)'},
+        {opacity:1,y:0,clipPath:'inset(0 0 0% 0)',duration:.9,stagger:.1,ease:'power3.out',overwrite:true});
     }});
 
-  /* ---- parallaxe légère des photos de section ---- */
+  /* ---- cartes « What you get » : décalage + rotation franches ---- */
+  gsap.utils.toArray('.get').forEach(function(g,i){
+    gsap.fromTo(g,{opacity:0,y:64,rotate:(i%2?2.6:-2.6),scale:.92},{opacity:1,y:0,rotate:0,scale:1,duration:.85,ease:'power3.out',
+      scrollTrigger:{trigger:g,start:'top 90%',once:true}});
+  });
+
+  /* ---- questions fréquentes : cascade + bascule ---- */
+  gsap.utils.toArray('.faq details').forEach(function(d,i){
+    gsap.fromTo(d,{opacity:0,y:26,rotateX:8,transformPerspective:700},{opacity:1,y:0,rotateX:0,duration:.55,ease:'power2.out',delay:(i%6)*0.04,
+      scrollTrigger:{trigger:d,start:'top 93%',once:true}});
+  });
+
+  /* ---- CHAQUE IMAGE : masque de révélation + zoom/parallaxe scrubés ---- */
+  gsap.utils.toArray('.photo img, .docframe img').forEach(function(img,i){
+    var wrap=img.closest('.photo')||img.closest('.docframe');
+    if(!wrap||wrap.closest('header')) return;   /* le héros a sa propre scène */
+    var dir=(i%2)?1:-1;
+    gsap.fromTo(img,{scale:1.24,yPercent:8*dir},{scale:1.04,yPercent:-8*dir,ease:'none',
+      scrollTrigger:{trigger:wrap,start:'top bottom',end:'bottom top',scrub:true}});
+    gsap.fromTo(wrap,{clipPath:'inset(0% 0% 100% 0% round 18px)'},{clipPath:'inset(0% 0% 0% 0% round 18px)',duration:1.1,ease:'power3.out',
+      scrollTrigger:{trigger:wrap,start:'top 88%',once:true}});
+  });
+
+  /* ---- registre : révélation ligne par ligne ---- */
+  var ledgerEl=document.querySelector('.ledger');
+  if(ledgerEl){
+    var ledgerRows=gsap.utils.toArray('.ledger .lrow');
+    gsap.set(ledgerRows,{opacity:0,x:-30});
+    ScrollTrigger.create({trigger:ledgerEl,start:'top 88%',once:true,onEnter:function(){
+      gsap.to(ledgerRows,{opacity:1,x:0,duration:.6,stagger:.14,ease:'power2.out',overwrite:true});
+    }});
+  }
+
+  /* ---- livrable : bascule 3D scrubée + montée franche ---- */
+  var docf=document.querySelector('.docframe');
+  if(docf){
+    gsap.fromTo(docf,{opacity:0},{opacity:1,duration:.9,ease:'power2.out',
+      scrollTrigger:{trigger:docf,start:'top 92%',once:true}});
+    gsap.fromTo(docf,{rotateX:12,y:66,transformPerspective:900,scale:.96},{rotateX:-5,y:-26,scale:1,ease:'none',
+      scrollTrigger:{trigger:docf,start:'top bottom',end:'bottom top',scrub:true}});
+  }
+
+  /* ---- BANDE HORIZONTALE pilotée par le scroll (galerie des visuels / du registre) ---- */
+  var band=document.querySelector('.hband');
+  if(band){
+    var track=band.querySelector('.htrack');
+    if(wide&&track){
+      band.classList.add('js-on');
+      var getAmt=function(){ return Math.max(0,track.scrollWidth-band.clientWidth); };
+      gsap.fromTo(track,{opacity:0},{opacity:1,duration:.8,ease:'power2.out',
+        scrollTrigger:{trigger:band,start:'top 85%',once:true}});
+      gsap.to(track,{x:function(){return -getAmt();},ease:'none',
+        scrollTrigger:{trigger:band,start:'top top',end:function(){return '+='+getAmt();},pin:true,scrub:1,invalidateOnRefresh:true}});
+    }else if(track){
+      gsap.utils.toArray('.hband .panel').forEach(function(p,i){
+        gsap.fromTo(p,{opacity:0,y:40,rotate:(i%2?1.6:-1.6)},{opacity:1,y:0,rotate:0,duration:.75,ease:'power3.out',
+          scrollTrigger:{trigger:p,start:'top 92%',once:true}});
+      });
+    }
+  }
+
+  /* ---- parallaxe franche des photos de section (au-delà du zoom interne) ---- */
   if(wide){
-    gsap.utils.toArray('.split .photo img').forEach(function(img,i){
+    gsap.utils.toArray('.split .photo').forEach(function(p,i){
       var dir=i%2?1:-1;
-      gsap.fromTo(img,{yPercent:-4*dir},{yPercent:4*dir,ease:'none',
-        scrollTrigger:{trigger:img.parentNode,start:'top bottom',end:'bottom top',scrub:true}});
+      gsap.fromTo(p,{yPercent:6*dir},{yPercent:-6*dir,ease:'none',
+        scrollTrigger:{trigger:p,start:'top bottom',end:'bottom top',scrub:true}});
     });
   }
 
