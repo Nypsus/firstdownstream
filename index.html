@@ -91,7 +91,22 @@ header{--mx:50%;--my:0%;overflow:hidden}
 .get span{font-size:.86rem;color:var(--mut);display:block}
 /* ——— effets de scroll (progressive : tout reste visible sans JS) ——— */
 .rv{will-change:opacity,transform,clip-path}
-@media(max-width:720px){h1{font-size:1.55rem}.optgrid{grid-template-columns:1fr}.getgrid{grid-template-columns:1fr}.step{grid-template-columns:50px 1fr;gap:12px}.step .ico{width:50px;height:50px}.split{grid-template-columns:1fr;gap:20px}}
+@media(max-width:720px){.dsec{padding:14px}.docframe{padding:12px;border-radius:14px}.docbadge{top:9px;left:9px;font-size:.58rem;padding:4px 9px}h1{font-size:1.55rem}.optgrid{grid-template-columns:1fr}.getgrid{grid-template-columns:1fr}.step{grid-template-columns:50px 1fr;gap:12px}.step .ico{width:50px;height:50px}.split{grid-template-columns:1fr;gap:20px}}
+
+/* ——— livrable : maquette d'export (document réel, exemple) ——— */
+.docframe{position:relative;background:#0b1016;border:1px solid var(--line);border-radius:20px;padding:26px;margin:24px 0 12px;box-shadow:0 22px 60px rgba(0,0,0,.45);overflow:hidden}
+.docframe img{width:100%;height:auto;display:block;border-radius:8px;box-shadow:0 10px 34px rgba(0,0,0,.5)}
+.docbadge{position:absolute;top:13px;left:13px;z-index:3;background:#ffb400;color:#241a05;font-size:.63rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-radius:20px;padding:5px 12px;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.docnudge{display:flex;gap:8px 20px;flex-wrap:wrap;margin-top:14px}
+.docnudge span{font-size:.82rem;color:var(--mut)}
+.docnudge span b{color:var(--fg)}
+.stack{position:relative;z-index:1;will-change:transform,opacity}
+.docframe a{display:block;text-decoration:none}
+/* ——— Lenis : défilement fluide piloté par GSAP ——— */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto !important}
+.lenis.lenis-stopped{overflow:hidden}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
@@ -104,7 +119,7 @@ header{--mx:50%;--my:0%;overflow:hidden}
   <h1>Your supplier's EUDR reference number arrives with the goods.<br>If you can't show it in 2027, customs and auditors will — and it's gone.</h1>
 
   <div class="photo dim cap" data-cap="The reference number arrives with the delivery. What matters is what you do with it before the authority asks.">
-    <img src="assets/logistics-container.jpg" alt="Container ship — the DDS reference number travels with the goods from importer to first downstream buyer" loading="eager">
+    <img width="1200" height="800" src="assets/logistics-container.jpg" alt="Container ship — the DDS reference number travels with the goods from importer to first downstream buyer" loading="eager">
   </div>
 
   <p class="sub">From <b style="color:var(--fg)">30 December 2026</b>, every company supplied directly by an EUDR operator (coffee roasters, chocolate makers, wood and rubber distributors, leather traders, palm-oil and soy buyers) must <b style="color:var(--fg)">record the due-diligence statement (DDS) reference numbers it receives, tie them to the incoming deliveries, and keep the record for five years</b> (Art. 4(7), 5(3)–(4) EUDR). No geolocation, no geospatial platform — just a discipline your ERP doesn't have. <b style="color:var(--fg)">FirstDownstream is the ledger for that obligation.</b></p>
@@ -121,12 +136,12 @@ header{--mx:50%;--my:0%;overflow:hidden}
     <p class="acc">FirstDownstream: €49/month, deliveries logged the day they arrive, reference numbers matched to goods receipts, one-click audit export. The roaster's 5-year record is complete, per delivery, per supplier.</p>
   </div>
   <div class="photo rv">
-    <img src="assets/warehouse.jpg" alt="Modern logistics warehouse — inbound goods where the DDS reference number must be captured on arrival" loading="lazy">
+    <img width="1200" height="800" src="assets/warehouse.jpg" alt="Modern logistics warehouse — inbound goods where the DDS reference number must be captured on arrival" loading="lazy">
   </div>
 </div>
 
 <h2>How it works</h2>
-<div class="card rv">
+<div class="card" id="howcard">
   <div class="step">
     <div class="ico">
       <svg viewBox="0 0 48 48" width="34" height="34" role="img" aria-label="step 1: capture reference numbers on arrival">
@@ -248,19 +263,38 @@ header{--mx:50%;--my:0%;overflow:hidden}
   <p class="figcap">The record the regulation asks for, in place before the first audit — not rebuilt after it.</p>
 </div>
 
+<h2 id="deliverable">Exactly what you&#8217;ll receive</h2>
+<div class="card rv dsec">
+  <p>Not a dashboard screenshot and not a promise &mdash; this is the export itself. The audit pack leaves FirstDownstream as a document plus a CSV: one row per delivery, the DDS reference number tied to the goods receipt and the purchase order, the supplier master data beside it, and the escalation trail wherever a concern was raised.</p>
+  <div class="docframe">
+    <span class="docbadge">Example &middot; sample document</span>
+    <a href="assets/deliverable-auditpack.png" target="_blank" rel="noopener" aria-label="Open the sample audit pack at full size">
+      <img width="1240" height="1754" src="assets/deliverable-auditpack.png" alt="Sample export: a DDS Reference Ledger audit pack for a fictional first-downstream trader, listing DDS reference numbers against goods receipts, purchase orders and suppliers, with a substantiated-concern row and a five-year retention block" loading="lazy">
+    </a>
+  </div>
+  <p class="figcap">Example only. The company shown &mdash; Meridian Coffee Traders B.V., a 30-person EU first-downstream trader &mdash; is fictional and the numbers are a sample. Your export carries your own deliveries, suppliers and reference numbers; the layout, the columns and the retention block are what the authority receives.</p>
+  <p class="hint" style="text-align:center;margin-top:2px"><a href="assets/deliverable-auditpack.png" target="_blank" rel="noopener" style="color:var(--acc)">Open the sample at full size &nearr;</a></p>
+  <div class="docnudge">
+    <span><b>One row per delivery</b>, five years deep</span>
+    <span>Reference matched to <b>receipt &amp; PO</b></span>
+    <span><b>Substantiated-concern</b> trail included</span>
+    <span><b>PDF index + CSV</b>, ready for inspection</span>
+  </div>
+</div>
+
 <h2 id="pricing">Pricing</h2>
-<div class="card rv">
+<div class="card stack">
   <b>Solo — €49/month</b>
   <p>1 entity. Reference-number ledger, inbound capture (form + paste), assignment to deliveries, 5-year record, one-click audit export per supplier. Enough for the roaster, distributor or wholesale buyer with a single importer relationship.</p>
   <p class="hint">For reference: the enterprise EUDR stack (osapiens, LiveEO, Orbify) starts at tens of thousands per year and solves the operator-side geospatial problem you don't have. A consulting engagement to map your role runs €2k–€40k. This is the €49 ledger for the obligation you actually carry.</p>
   <p><a class="cta" href="https://buy.stripe.com/eVqbIU49B15Vf1D8jJ3sI0u" rel="noopener" target="_blank">💳 Subscribe to Solo — €49/month</a></p>
 </div>
-<div class="card rv">
+<div class="card stack">
   <b>Team — €149/month</b>
   <p>Multiple entities and sites, CSV/ERP ingestion so receipts flow in automatically, audit-pack exports across the group, and per-user access for warehouse + finance. For importers' buyers, groups and multi-site distributors.</p>
   <p><a class="cta" href="https://buy.stripe.com/aFa8wI5dFbKz6v7fMb3sI0v" rel="noopener" target="_blank">💳 Subscribe to Team — €149/month</a></p>
 </div>
-<div class="card rv">
+<div class="card stack">
   <b>Scale — €299/month</b>
   <p>Multi-country, supplier-side collection add-on (get declaration identifiers from your micro/small primary operators), API, and priority support. For groups managing several commodity chains or acting as authorised representatives.</p>
   <p><a class="cta" href="https://buy.stripe.com/3cIaEQaxZbKz06JdE33sI0w" rel="noopener" target="_blank">💳 Subscribe to Scale — €299/month</a></p>
@@ -324,6 +358,9 @@ header{--mx:50%;--my:0%;overflow:hidden}
 
 <footer>FirstDownstream — the EUDR DDS reference ledger for first downstream operators &amp; traders. Sources: Regulation (EU) 2023/1115 as amended by Reg. (EU) 2025/2650 (Art. 4(7), 5(3)–(4)); European Commission FAQ (5th iteration, no. 3.4); Commission guidance on the Deforestation Regulation. · <a href="mailto:nypsus.business@gmail.com" style="color:var(--mut)">Contact</a></footer>
 </main>
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/vendor/lenis.min.js"></script>
 <script>
 function money(n){return n.toLocaleString('en-US',{style:'currency',currency:'EUR',maximumFractionDigits:0})}
 function normRef(s){
@@ -405,23 +442,26 @@ function signup(e){
   document.getElementById('signok').innerHTML='Your email has been opened — we\'ll reply within 24 working hours.';
   return false;
 }
-/* ——— effets pilotés par le scroll : progression, révélations par masque + décalage
-       dégressif, parallaxe légère des photos, compteurs animés, halo du héros.
-       Progressif : sans JS ou en reduced-motion, la page reste entièrement lisible. ——— */
+/* ——— moteur de scroll (consolidé) : Lenis + GSAP ScrollTrigger, libs vendorisées.
+       Scènes épinglées (pin + scrub), timeline scrubée du héros, cartes qui glissent
+       l'une par-dessus l'autre, cascade des révélations, parallaxe, compteurs.
+       tout le contenu est visible sans JS ; prefers-reduced-motion respecté. ——— */
 (function(){
   var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var els=[].slice.call(document.querySelectorAll('.rv'));
+  var hasGSAP=typeof window.gsap!=='undefined';
+  var hasST=hasGSAP&&typeof window.ScrollTrigger!=='undefined';
+  var hasLenis=typeof window.Lenis!=='undefined';
+  var wide=window.matchMedia&&window.matchMedia('(min-width:901px)').matches;
   var bar=document.getElementById('scrollbar');
 
-  function progress(){
+  function progressBar(){
     var h=document.documentElement;
     var max=(h.scrollHeight-h.clientHeight)||1;
     var top=h.scrollTop||document.body.scrollTop||window.pageYOffset||0;
-    var p=Math.max(0,Math.min(1,top/max));
-    if(bar) bar.style.transform='scaleX('+p+')';
+    if(bar) bar.style.transform='scaleX('+Math.max(0,Math.min(1,top/max))+')';
   }
 
-  /* halo qui suit le pointeur sur le héros */
+  /* halo qui suit le pointeur (héros) — indépendant des libs */
   var hero=document.querySelector('header');
   if(hero&&!reduced){
     hero.addEventListener('pointermove',function(e){
@@ -431,85 +471,116 @@ function signup(e){
     });
   }
 
-  /* révélations : masque (clip-path) + décalage dégressif entre frères */
-  if(reduced||!('IntersectionObserver' in window)){
-    els.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; el.style.clipPath='none'; });
-  } else {
-    els.forEach(function(el){
-      el.style.opacity='0';
-      el.style.transform='translateY(18px)';
-      el.style.clipPath='inset(0 0 24% 0)';
-      el.style.transition='opacity .7s ease, transform .7s cubic-bezier(.22,.61,.36,1), clip-path .8s cubic-bezier(.22,.61,.36,1)';
+  /* ---- repli : sans libs, ou en reduced-motion, la page reste entièrement lisible ---- */
+  if(!hasGSAP||!hasST||reduced){
+    progressBar();
+    window.addEventListener('scroll',progressBar,{passive:true});
+    window.addEventListener('resize',progressBar);
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ---- Lenis : défilement fluide, branché sur le ticker GSAP ---- */
+  var lenis=null;
+  if(hasLenis){
+    lenis=new Lenis({duration:1.05,easing:function(t){return 1-Math.pow(1-t,3);}});
+    window.__lenis=lenis;
+    lenis.on('scroll',ScrollTrigger.update);
+    gsap.ticker.add(function(time){ lenis.raf(time*1000); });
+    gsap.ticker.lagSmoothing(0);
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){
+      a.addEventListener('click',function(e){
+        var id=a.getAttribute('href');
+        if(!id||id.length<2) return;
+        var t=document.querySelector(id);
+        if(!t) return;
+        e.preventDefault(); lenis.scrollTo(t,{offset:-24,duration:1.2});
+      });
     });
-    var io=new IntersectionObserver(function(entries){
-      entries.forEach(function(en){
-        if(en.isIntersecting){
-          var el=en.target;
-          var sibs=[].slice.call(el.parentNode.children).filter(function(s){ return s.classList.contains('rv'); });
-          var idx=Math.max(0,sibs.indexOf(el));
-          el.style.transitionDelay=(Math.min(idx,4)*0.08)+'s';
-          el.style.opacity='1'; el.style.transform='none'; el.style.clipPath='none';
-          io.unobserve(el);
-        }
-      });
-    },{threshold:.1});
-    els.forEach(function(el){ io.observe(el); });
-    var safety=setTimeout(function(){
-      els.forEach(function(el){ el.style.opacity='1'; el.style.transform='none'; el.style.clipPath='none'; });
-    },5000);
-    window.__fdReveal=function(){ clearTimeout(safety); };
   }
 
-  /* parallaxe légère sur les photos (conteneur overflow:hidden => aucun débordement) */
-  var paras=[].slice.call(document.querySelectorAll('.photo img'));
-  if(!reduced&&paras.length){
-    paras.forEach(function(p){ p.style.willChange='transform'; });
-    var ticking=false;
-    function onScroll(){
-      if(ticking) return; ticking=true;
-      requestAnimationFrame(function(){
-        var vh=window.innerHeight||1;
-        paras.forEach(function(p){
-          var r=p.getBoundingClientRect();
-          var rel=(r.top+r.height/2-vh/2)/vh;
-          var shift=Math.max(-16,Math.min(16,-rel*20));
-          p.style.transform='translate3d(0,'+shift.toFixed(1)+'px,0) scale(1.045)';
-        });
-        progress();
-        ticking=false;
-      });
+  /* ---- repère de progression ---- */
+  gsap.fromTo(bar,{scaleX:0},{scaleX:1,ease:'none',
+    scrollTrigger:{trigger:document.body,start:'top top',end:'bottom bottom',scrub:.3}});
+
+  /* ---- scène 1 · héros : timeline scrubée (image qui s'ouvre + texte qui dérive) ---- */
+  if(hero){
+    var hImg=hero.querySelector('.photo img');
+    var hGlow=hero.querySelector('.hero-glow');
+    var scene=gsap.timeline({scrollTrigger:{trigger:hero,start:'top top',end:'+=85%',scrub:1}});
+    if(hImg){
+      scene.fromTo(hImg,{scale:1.02},{scale:1.17,ease:'none'},0);
+      scene.fromTo(hero.querySelector('.photo'),{clipPath:'inset(0% 0% 0% 0%)'},{clipPath:'inset(0% 0% 0% 0%)',ease:'none'},0);
     }
-    window.addEventListener('scroll',onScroll,{passive:true});
-    window.addEventListener('resize',onScroll);
-    onScroll();
-  } else {
-    window.addEventListener('scroll',progress,{passive:true});
-    progress();
+    if(hGlow) scene.fromTo(hGlow,{opacity:.85},{opacity:0,ease:'none'},0);
+    scene.fromTo(hero.querySelector('h1'),{yPercent:0},{yPercent:-13,ease:'none'},0);
+    scene.fromTo(hero.querySelector('.logo'),{yPercent:0},{yPercent:-34,ease:'none'},0);
+    scene.fromTo(hero.querySelector('.eyebrow'),{yPercent:0,opacity:1},{yPercent:-46,opacity:0,ease:'none'},0);
+    scene.fromTo(hero.querySelector('.sub'),{yPercent:0},{yPercent:7,ease:'none'},0);
   }
 
-  /* compteurs animés sur les chiffres clés */
-  var nums=[].slice.call(document.querySelectorAll('[data-count-to]'));
-  if(nums.length&&!reduced&&'IntersectionObserver' in window){
-    function animate(el){
-      var to=parseFloat(el.getAttribute('data-count-to'))||0;
-      var pre=el.getAttribute('data-count-prefix')||'';
-      var suf=el.getAttribute('data-count-suffix')||'';
-      var start=null,dur=1100;
-      function fmt(v){ return pre+v.toLocaleString('en-US',{maximumFractionDigits:0})+suf; }
-      function step(ts){
-        if(start===null) start=ts;
-        var t=Math.min(1,(ts-start)/dur);
-        var e=1-Math.pow(1-t,3);
-        el.textContent=fmt(to*e);
-        if(t<1) requestAnimationFrame(step); else el.textContent=fmt(to);
-      }
-      requestAnimationFrame(step);
-    }
-    var nio=new IntersectionObserver(function(entries){
-      entries.forEach(function(en){ if(en.isIntersecting){ animate(en.target); nio.unobserve(en.target); } });
-    },{threshold:.5});
-    nums.forEach(function(n){ nio.observe(n); });
+  /* ---- scène 2 · « How it works » épinglée : les 3 étapes se révèlent au scroll ---- */
+  var how=document.getElementById('howcard');
+  if(how&&wide){
+    var steps=gsap.utils.toArray('#howcard .step');
+    gsap.set(steps,{opacity:.18,y:26});
+    var howTl=gsap.timeline({scrollTrigger:{trigger:how,start:'top 96px',end:'+=120%',pin:true,scrub:1}});
+    howTl.to(steps,{opacity:1,y:0,duration:1,stagger:.85,ease:'power2.out'},0)
+         .to({},{duration:.4});
   }
+
+  /* ---- scène 3 · cartes de prix : chacune glisse par-dessus la précédente ---- */
+  if(wide){
+    var stackEls=gsap.utils.toArray('.stack');
+    stackEls.forEach(function(card,i){
+      var next=stackEls[i+1];
+      gsap.set(card,{zIndex:10+i});            /* la carte entrante passe par-dessus */
+      if(!next) return;                        /* la derniere carte reste en flux normal */
+      ScrollTrigger.create({
+        trigger:card,start:'top 108px',endTrigger:next,end:'top 108px',
+        pin:true,pinSpacing:false
+      });
+      gsap.fromTo(card,{scale:1},{scale:.92,ease:'none',
+        scrollTrigger:{trigger:next,start:'top bottom',end:'top 40%',scrub:true}});
+      gsap.fromTo(card,{opacity:1},{opacity:.1,ease:'none',
+        scrollTrigger:{trigger:next,start:'top 96%',end:'top 45%',scrub:true}});
+    });
+  }
+
+  /* ---- cascade des révélations ---- */
+  ScrollTrigger.batch('.rv',{interval:.14,batchMax:4,start:'top 90%',once:true,
+    onEnter:function(batch){
+      gsap.fromTo(batch,{opacity:0,y:28,clipPath:'inset(0 0 16% 0)'},
+        {opacity:1,y:0,clipPath:'inset(0 0 0% 0)',duration:.85,stagger:.1,ease:'power3.out',overwrite:true});
+    }});
+
+  /* ---- parallaxe légère des photos de section ---- */
+  if(wide){
+    gsap.utils.toArray('.split .photo img').forEach(function(img,i){
+      var dir=i%2?1:-1;
+      gsap.fromTo(img,{yPercent:-4*dir},{yPercent:4*dir,ease:'none',
+        scrollTrigger:{trigger:img.parentNode,start:'top bottom',end:'bottom top',scrub:true}});
+    });
+  }
+
+  /* ---- compteurs animés ---- */
+  gsap.utils.toArray('[data-count-to]').forEach(function(el){
+    var to=parseFloat(el.getAttribute('data-count-to'))||0;
+    var pre=el.getAttribute('data-count-prefix')||'';
+    var suf=el.getAttribute('data-count-suffix')||'';
+    var o={v:0};
+    ScrollTrigger.create({trigger:el,start:'top 95%',once:true,onEnter:function(){
+      gsap.to(o,{v:to,duration:1.1,ease:'power2.out',onUpdate:function(){
+        el.textContent=pre+Math.round(o.v).toLocaleString('en-US',{maximumFractionDigits:0})+suf;
+      }});
+    }});
+  });
+
+  window.addEventListener('load',function(){ ScrollTrigger.refresh(); });
+  document.querySelectorAll('img[loading="lazy"]').forEach(function(im){
+    im.addEventListener('load',function(){ ScrollTrigger.refresh(); });
+  });
 })();
 </script>
 </body>
